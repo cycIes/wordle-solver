@@ -2,7 +2,7 @@ f = open('valid-wordle-words.txt', 'r')
 
 #possible_letters = [letter for letter in 'abcdefghijklmnopqrstuvwxyz']
 word = '_____'
-known_letters = []
+known_letters = '_____'
 bad_letters = []
 guesses = []
 
@@ -23,10 +23,16 @@ for line in f:
 
 def scanGuesses():
     global guesses
+    global known_letters
     good_guesses = guesses.copy()
     for word in guesses:
         for letter in known_letters:
+            if letter == '_':
+                continue
             if letter not in word:
+                good_guesses.remove(word)
+                break
+            elif letter == word[(known_letters.index(letter))]:
                 good_guesses.remove(word)
                 break
     guesses = good_guesses.copy()
@@ -41,9 +47,9 @@ def scanGuesses():
 
 while '_' in word:
     word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters.\n')
-    letters = input('What are the known letters not in the correct spot (in yellow)? Use their exact positions with underscores in non-yellow spaces.\n')
-    for letter in letters:
-        known_letters.append(letter)
+    known_letters = input('What are the known letters not in the correct spot (in yellow)? Use their exact positions with underscores in non-yellow spaces.\n')
+    # for letter in letters:
+    #     known_letters.append(letter)
     letters = input('What are letters not in the word (in gray)? Do not leave a space between multiple letters.\n')
     for letter in letters:
         #possible_letters.remove(letter)
