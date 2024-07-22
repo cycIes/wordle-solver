@@ -5,6 +5,7 @@ word = '_____'
 known_letters = '_____'
 bad_letters = []
 guesses = []
+recommended = []
 
 # todo
 # add idiot proofing to inputs (ex: repeat letters, non-letters)
@@ -45,6 +46,15 @@ def scanGuesses():
 
     guesses = good_guesses.copy()
 
+def removeDuplicateLetterWords(list):
+    newList = []
+    for word in list:
+        wordSet = {letter for letter in word}
+        if len(wordSet) > 4:
+            newList.append(word)
+    
+    return newList
+
 while '_' in word:
     word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters.\n')
     known_letters = input('What are the known letters not in the correct spot (in yellow)? Use their exact positions with underscores in non-yellow spaces.\n')
@@ -62,4 +72,8 @@ while '_' in word:
 
     scanGuesses()
     print(guesses)
+    if len(guesses) > 10:
+        recommended = (removeDuplicateLetterWords(guesses))
+        print(recommended)
+    
     # print('Top 3 recommended guesses: ')
