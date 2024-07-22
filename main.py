@@ -7,7 +7,6 @@ known_letters = '_____'
 bad_letters = []
 guesses = []
 recommended = []
-scoreKeeper = {}
 
 # todo
 # add idiot proofing to inputs (ex: repeat letters, non-letters)
@@ -71,14 +70,26 @@ def scanGuesses():
     
 #     return newList
 
-def detectDuplicateLetters(word):
+def hasDuplicateLetters(word):
     wordSet = {letter for letter in word}
-    if len(wordSet) > 4:
+    if len(wordSet) < 5:
         return True    
     return False
 
 def scoreGuesses(list):
-    pass
+    global frequency
+    scoreKeeper = {}
+    for word in list:
+        score = 0
+        for letter in word:
+            score += (26 - frequency.index(letter))
+        if hasDuplicateLetters(word):
+            score /= 2
+        scoreKeeper[word] = score
+
+    sortedScores = dict(sorted(scoreKeeper.items(), key=lambda item: item[1], reverse=True))
+    sortedWords = sortedScores.keys()
+    return sortedWords
 
 while '_' in current_word:
     current_word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters. Enter to quit.\n')
