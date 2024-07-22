@@ -1,7 +1,7 @@
 f = open('valid-wordle-words.txt', 'r')
 
 #possible_letters = [letter for letter in 'abcdefghijklmnopqrstuvwxyz']
-word = '_____'
+current_word = '_____'
 known_letters = '_____'
 bad_letters = []
 guesses = []
@@ -26,6 +26,19 @@ def scanGuesses():
     global guesses
     global known_letters
     good_guesses = guesses.copy()
+
+    for word in guesses:
+        for letter in current_word:
+            if letter == '_':
+                continue
+            if letter not in word:
+                good_guesses.remove(word)
+                break
+            elif letter != word[(current_word.index(letter))]:
+                good_guesses.remove(word)
+                break
+    guesses = good_guesses.copy()
+    
     for word in guesses:
         for letter in known_letters:
             if letter == '_':
@@ -55,8 +68,10 @@ def removeDuplicateLetterWords(list):
     
     return newList
 
-while '_' in word:
-    word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters.\n')
+while '_' in current_word:
+    current_word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters. Enter to quit.\n')
+    if current_word == '':
+        break
     known_letters = input('What are the known letters not in the correct spot (in yellow)? Use their exact positions with underscores in non-yellow spaces.\n')
     # for letter in letters:
     #     known_letters.append(letter)
@@ -66,14 +81,15 @@ while '_' in word:
         bad_letters.append(letter)
     
     # remove later
-    print(word)
+    print(current_word)
     print(known_letters)
     print(bad_letters)
 
     scanGuesses()
-    print(guesses)
     if len(guesses) > 10:
         recommended = (removeDuplicateLetterWords(guesses))
         print(recommended)
+    else:
+        print(guesses)
     
     # print('Top 3 recommended guesses: ')
