@@ -11,14 +11,8 @@ scoreKeeper = {}
 
 # todo
 # add idiot proofing to inputs (ex: repeat letters, non-letters)
-# code is not efficient enough, combine searches in scanGuesses
+# make scanGuesses more efficient
 # score guesses
-
-#len(f.readlines())
-
-# for line in f:
-#     print(line)
-# took 2.61 seconds
 
 for line in f:
     guesses.append(line[0:5])
@@ -29,30 +23,38 @@ def scanGuesses():
     good_guesses = guesses.copy()
 
     for word in guesses:
+        removed = False
+
         for letter in current_word:
             if letter == '_':
                 continue
             if letter not in word:
                 good_guesses.remove(word)
+                removed = True
                 break
             elif letter != word[(current_word.index(letter))]:
                 good_guesses.remove(word)
+                removed = True
                 break
-    guesses = good_guesses.copy()
-    
-    for word in guesses:
+
+        if removed == True:
+            continue
+        
         for letter in known_letters:
             if letter == '_':
                 continue
             if letter not in word:
                 good_guesses.remove(word)
+                removed = True
                 break
             elif letter == word[(known_letters.index(letter))]:
                 good_guesses.remove(word)
+                removed = True
                 break
-    guesses = good_guesses.copy()
+        
+        if removed == True:
+            continue
 
-    for word in guesses:
         for letter in bad_letters:
             if letter in word:
                 good_guesses.remove(word)
@@ -60,14 +62,20 @@ def scanGuesses():
 
     guesses = good_guesses.copy()
 
-def removeDuplicateLetterWords(list):
-    newList = []
-    for word in list:
-        wordSet = {letter for letter in word}
-        if len(wordSet) > 4:
-            newList.append(word)
+# def removeDuplicateLetters(list):
+#     newList = []
+#     for word in list:
+#         wordSet = {letter for letter in word}
+#         if len(wordSet) > 4:
+#             newList.append(word)
     
-    return newList
+#     return newList
+
+def detectDuplicateLetters(word):
+    wordSet = {letter for letter in word}
+    if len(wordSet) > 4:
+        return True    
+    return False
 
 def scoreGuesses(list):
     pass
@@ -90,10 +98,7 @@ while '_' in current_word:
     print(bad_letters)
 
     scanGuesses()
-    if len(guesses) > 10:
-        recommended = (removeDuplicateLetterWords(guesses))
-        print(recommended)
-    else:
-        print(guesses)
-    
-    # print('Top 3 recommended guesses: ')
+    # if len(guesses) > 10:
+    #     recommended = (removeDuplicateLetters(guesses))
+    #     print(recommended)
+    print(scoreGuesses(guesses))
