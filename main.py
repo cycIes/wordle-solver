@@ -1,17 +1,18 @@
 f = open('valid-wordle-words.txt', 'r')
+# frequency = 'etaoinshrdlcumwfgypbvkjxqz' # based on morse code
+frequency = 'esaoriltnudpmychgbkfwvzjxq'
 
-#possible_letters = [letter for letter in 'abcdefghijklmnopqrstuvwxyz']
 current_word = '_____'
 known_letters = '_____'
 bad_letters = []
 guesses = []
 recommended = []
+scoreKeeper = {}
 
 # todo
 # add idiot proofing to inputs (ex: repeat letters, non-letters)
-# cannot tell when a possible letter is not supposed to be in a position
-# maybe make a list for each position?
 # code is not efficient enough, combine searches in scanGuesses
+# score guesses
 
 #len(f.readlines())
 
@@ -67,6 +68,9 @@ def removeDuplicateLetterWords(list):
             newList.append(word)
     
     return newList
+
+def scoreGuesses(list):
+    pass
 
 while '_' in current_word:
     current_word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters. Enter to quit.\n')
