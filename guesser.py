@@ -1,23 +1,21 @@
 f = open('valid-wordle-words.txt', 'r')
-# frequency = 'etaoinshrdlcumwfgypbvkjxqz' # based on morse code
-frequency = 'esaoriltnudpmychgbkfwvzjxq'
+frequency = 'etaoinshrdlcumwfgypbvkjxqz' # based on morse code
+# frequency = 'esaoriltnudpmychgbkfwvzjxq' # based on the text file
 
 current_word = '_____'
 known_letters = '_____'
 bad_letters = []
 guesses = []
-recommended = []
 
-# todo
+# TODO
 # add idiot proofing to inputs (ex: repeat letters, non-letters)
 # make scanGuesses more efficient
-# score guesses
+# tune guess scoring
 
 for line in f:
-    guesses.append(line[0:5])
+    guesses.append(line[0:5]) # to remove the \n after each word
 
-def scanGuesses():
-    global guesses
+def scanGuesses(guesses):
     global known_letters
     good_guesses = guesses.copy()
 
@@ -60,15 +58,7 @@ def scanGuesses():
                 break
 
     guesses = good_guesses.copy()
-
-# def removeDuplicateLetters(list):
-#     newList = []
-#     for word in list:
-#         wordSet = {letter for letter in word}
-#         if len(wordSet) > 4:
-#             newList.append(word)
-    
-#     return newList
+    return guesses
 
 def hasDuplicateLetters(word):
     wordSet = {letter for letter in word}
@@ -76,40 +66,49 @@ def hasDuplicateLetters(word):
         return True    
     return False
 
-def scoreGuesses(list):
+def vowelCount(word):
+    count = 0
+    vowels = 'aeiou' # not counting y because it is special
+    for letter in word:
+        if letter in vowels:
+            count += 1
+    
+    return count
+
+def scoreGuesses(guesses):
     global frequency
     scoreKeeper = {}
-    for word in list:
+    for word in guesses:
         score = 0
         for letter in word:
             score += (26 - frequency.index(letter))
+        if vowelCount(word) > 2:
+            score *= .9
         if hasDuplicateLetters(word):
             score /= 2
         scoreKeeper[word] = score
 
     sortedScores = dict(sorted(scoreKeeper.items(), key=lambda item: item[1], reverse=True))
-    sortedWords = sortedScores.keys()
+    sortedWords = list(sortedScores.keys())
     return sortedWords
 
+# start of program
+
+print('\033c', end='', flush=True) # to clear the terminal with ANSI code
+
 while '_' in current_word:
-    current_word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters. Enter to quit.\n')
+    current_word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters. Type q to quit.\n')
     if current_word == '':
+        current_word = '_____'
+    elif current_word == 'q':
         break
     known_letters = input('What are the known letters not in the correct spot (in yellow)? Use their exact positions with underscores in non-yellow spaces.\n')
-    # for letter in letters:
-    #     known_letters.append(letter)
     letters = input('What are letters not in the word (in gray)? Do not leave a space between multiple letters.\n')
     for letter in letters:
-        #possible_letters.remove(letter)
         bad_letters.append(letter)
-    
-    # remove later
-    print(current_word)
-    print(known_letters)
-    print(bad_letters)
 
-    scanGuesses()
-    # if len(guesses) > 10:
-    #     recommended = (removeDuplicateLetters(guesses))
-    #     print(recommended)
-    print(scoreGuesses(guesses))
+    guesses = scanGuesses(guesses)
+    sortedGuesses = scoreGuesses(guesses)
+    print(sortedGuesses)
+    print(f'There are {len(sortedGuesses)} possible words')
+    print('Top three: ' + str(sortedGuesses[0:3]))
