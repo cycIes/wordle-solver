@@ -16,7 +16,7 @@ class Wordle:
     def processGuess(self, guess):
         self.attempts.append(guess)
         if guess == self.answer:
-            self.congratulate()
+            # self.congratulate()
             return 'Victory'
         
         currWord = ''
@@ -40,20 +40,21 @@ class Wordle:
                 badLetters.append(guess[i])
 
         return [currWord, knownLetters, badLetters]
+    
     def congratulate(self):
-        print('Congrats! You got the word!')
-        print('The word was ' + self.answer)
+        print(f'Congrats! You got the word {self.answer}!')
 
     def reveal(self):
         print(self.answer)
 
-# wordle both
+# wordle bot
 class Player:
-    def __init__(self, guesses):
+    def __init__(self, guesses, frequency):
         self.guesses = words.copy()
         self.currWord = '_____'
         self.knownLetters = '_____'
         self.badLetters = []
+        self.frequency = frequency
     
     def update(self, currWord, knownLetters, badLetters):
         self.currWord = currWord
@@ -61,9 +62,8 @@ class Player:
         self.badLetters = badLetters
 
     def guess(self):
-        # pass in known letters, possible, invalid, etc.
         self.guesses = guesser.scanGuesses(self.guesses, self.currWord, self.knownLetters, self.badLetters) # narrow down the guess list
-        self.guesses = guesser.scoreGuesses(self.guesses) # sort guess list
+        self.guesses = guesser.scoreGuesses(self.guesses, self.frequency) # sort guess list
         return self.guesses[0]
 
 
@@ -78,12 +78,40 @@ def play(player, wordle):
         player.badLetters = feedback[2]
     
     attempts = len(wordle.attempts)
-    # print("Attempts: " + str(attempts))
     return attempts
 
-wordle = Wordle()
-bot = Player(words)
+def average(numbers):
+    total = sum(numbers)
+    return total / len(numbers)
 
-wordle.reveal()
+def testAccuracy(reps, *freqs):
+    attempts = []
+    for i in range(len(freqs)):
+        attempts.append([])
 
-play(bot, wordle)
+    for i in range(reps):
+        wordle = Wordle()
+        count = 0
+        for frequency in freqs:
+            bot = Player(words, frequency)
+            wordle.attempts = []
+            attempts[count].append(play(bot, wordle))
+            count += 1
+    
+    avgAttempts = []
+    for group in attempts:
+        avgAttempts.append(average(group))
+    
+    for avg in avgAttempts:
+        iteration = avgAttempts.index(avg) + 1
+        print('Test ' + str(iteration))
+        print(avg)
+        
+
+# program starts here
+
+freq1 = 'etaoinshrdlcumwfgypbvkjxqz'
+freq2 = 'esaoriltnudpmychgbkfwvzjxq'
+freq3 = 'etaoinsrhdlucmfywgpbvkxqjz'
+
+testAccuracy(10, freq1, freq2, freq3)

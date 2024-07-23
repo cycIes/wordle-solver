@@ -74,8 +74,7 @@ def vowelCount(word):
     
     return count
 
-def scoreGuesses(guesses):
-    global frequency
+def scoreGuesses(guesses, frequency):
     scoreKeeper = {}
     for word in guesses:
         score = 0

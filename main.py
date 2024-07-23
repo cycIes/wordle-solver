@@ -16,7 +16,7 @@ while '_' in guesser.current_word:
         guesser.bad_letters.append(letter)
 
     guesser.guesses = guesser.scanGuesses(guesser.guesses, current_word, known_letters, guesser.bad_letters)
-    sortedGuesses = guesser.scoreGuesses(guesser.guesses)
+    sortedGuesses = guesser.scoreGuesses(guesser.guesses, guesser.frequency)
     print(sortedGuesses)
     print(f'There are {len(sortedGuesses)} possible words')
     print('Top three: ' + str(sortedGuesses[0:3]))
