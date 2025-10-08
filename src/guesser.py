@@ -1,4 +1,4 @@
-f = open('valid-wordle-words.txt', 'r')
+f = open('src/valid-wordle-words.txt', 'r')
 frequency = 'etaoinshrdlcumwfgypbvkjxqz' # based on morse code
 # frequency = 'esaoriltnudpmychgbkfwvzjxq' # based on the text file
 
