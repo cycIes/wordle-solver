@@ -1,0 +1,1 @@
+word_list = open("src/lists/valid-wordle-words.txt", "r")
