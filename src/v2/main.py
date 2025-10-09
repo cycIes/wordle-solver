@@ -1,10 +1,12 @@
-import guesser
+import word-tree as tree
 
 # start of program
 
 print('\033c', end='', flush=True) # to clear the terminal with ANSI code
 
-while '_' in guesser.current_word:
+current_word = '_____'
+
+while '_' in current_word:
     current_word = input('What are the current known letters in the correct spot (in green)? Use underscore for unknown letters. Type q to quit.\n')
     if current_word == '':
         current_word = '_____'

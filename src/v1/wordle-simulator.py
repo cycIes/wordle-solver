@@ -1,4 +1,4 @@
-import guesser
+import src.v1.guesser as guesser
 import random
 
 f = open('valid-wordle-words.txt', 'r')
