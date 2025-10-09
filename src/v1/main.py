@@ -1,4 +1,4 @@
-import guesser as guesser
+import guesser
 
 # start of program
 
