@@ -75,7 +75,7 @@ for line in word_list:
     word = line[0:len(line)-1]
     editTree(word, 0, letter_tree)
 
-possible_words = []
-updatePossibleWords(letter_tree, possible_words, '_____', '_____', [])
-possible_words = sorted(possible_words, key = lambda d: d['freq'], reverse = True)
-print(possible_words)
+# possible_words = []
+# updatePossibleWords(letter_tree, possible_words, '_____', '_____', [])
+# possible_words = sorted(possible_words, key = lambda d: d['freq'], reverse = True)
+# print(possible_words)
