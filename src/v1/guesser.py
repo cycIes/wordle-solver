@@ -1,4 +1,4 @@
-f = open('src/valid-wordle-words.txt', 'r')
+f = open('src/lists/valid-wordle-words.txt', 'r')
 frequency = 'etaoinshrdlcumwfgypbvkjxqz' # based on morse code
 # frequency = 'esaoriltnudpmychgbkfwvzjxq' # based on the text file
 
@@ -60,8 +60,8 @@ def scanGuesses(guesses, green, yellow, gray):
     return guesses
 
 def hasDuplicateLetters(word):
-    wordSet = {letter for letter in word}
-    if len(wordSet) < 5:
+    word_set = {letter for letter in word}
+    if len(word_set) < 5:
         return True    
     return False
 
@@ -75,7 +75,7 @@ def vowelCount(word):
     return count
 
 def scoreGuesses(guesses, frequency):
-    scoreKeeper = {}
+    score_keeper = {}
     for word in guesses:
         score = 0
         for letter in word:
@@ -84,8 +84,8 @@ def scoreGuesses(guesses, frequency):
             score *= .9
         if hasDuplicateLetters(word):
             score /= 2
-        scoreKeeper[word] = score
+        score_keeper[word] = score
 
-    sortedScores = dict(sorted(scoreKeeper.items(), key=lambda item: item[1], reverse=True))
-    sortedWords = list(sortedScores.keys())
-    return sortedWords
+    sorted_scores = dict(sorted(score_keeper.items(), key=lambda item: item[1], reverse=True))
+    sorted_words = list(sorted_scores.keys())
+    return sorted_words
